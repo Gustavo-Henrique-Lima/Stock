@@ -1,10 +1,13 @@
 package com.gustavonascimento.stock.controllers;
 
+import com.gustavonascimento.stock.controllers.exceptions.StandardError;
 import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
 import com.gustavonascimento.stock.usecases.rawmaterial.*;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,6 +73,19 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(
+                            description = "Unprocessable Entity",
+                            responseCode = "422",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -111,6 +127,19 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(
+                            description = "Unprocessable Entity",
+                            responseCode = "422",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -154,6 +183,12 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -169,8 +204,8 @@ public class RawMaterialController {
     }
 
     @Operation(
-            summary = "List all raw materials",
-            description = "Returns all raw materials registered in the system",
+            summary = "List all raw materials paginated",
+            description = "Returns a page of raw materials registered in the system",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -200,10 +235,10 @@ public class RawMaterialController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
-    public ResponseEntity<List<GetRawMaterial>> list() {
+    public ResponseEntity<Page<GetRawMaterial>> list(Pageable pageable) {
 
-        List<GetRawMaterial> response =
-                listUseCase.execute();
+        Page<GetRawMaterial> response =
+                listUseCase.execute(pageable);
 
         return ResponseEntity.ok(response);
     }
@@ -231,6 +266,12 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )

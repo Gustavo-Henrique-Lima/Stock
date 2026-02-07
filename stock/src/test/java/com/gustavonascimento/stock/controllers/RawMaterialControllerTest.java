@@ -45,7 +45,7 @@ class RawMaterialControllerIT {
     @Test
     void shouldCreateRawMaterialWhenAuthorized() throws Exception {
         CreateRawMaterial input =
-                new CreateRawMaterial("FG", "Fogo", 100.0);
+                new CreateRawMaterial("FG1", "Fogo", 100.0);
 
         mockMvc.perform(post("/api/raw-materials")
                         .header("Authorization", "Bearer " + adminToken)
@@ -54,7 +54,7 @@ class RawMaterialControllerIT {
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.code").value("FG"))
+                .andExpect(jsonPath("$.code").value("FG1"))
                 .andExpect(jsonPath("$.name").value("Fogo"))
                 .andExpect(jsonPath("$.stockQuantity").value(100.0));
     }
@@ -62,9 +62,16 @@ class RawMaterialControllerIT {
     @Test
     void shouldListAllRawMaterials() throws Exception {
         mockMvc.perform(get("/api/raw-materials/all")
+                        .param("page", "0")
+                        .param("size", "10")
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.pageable").exists())
+                .andExpect(jsonPath("$.totalElements").exists())
+                .andExpect(jsonPath("$.totalPages").exists())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0));
     }
 
     @Test
@@ -73,7 +80,7 @@ class RawMaterialControllerIT {
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                new CreateRawMaterial("TR", "Terra", 50.0)
+                                new CreateRawMaterial("TR1", "Terra", 50.0)
                         )))
                 .andReturn()
                 .getResponse()
@@ -84,7 +91,7 @@ class RawMaterialControllerIT {
         mockMvc.perform(get("/api/raw-materials/{id}", id)
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("TR"))
+                .andExpect(jsonPath("$.code").value("TR1"))
                 .andExpect(jsonPath("$.name").value("Terra"));
     }
 
@@ -94,7 +101,7 @@ class RawMaterialControllerIT {
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                new CreateRawMaterial("AR", "Ar", 30.0)
+                                new CreateRawMaterial("AR1", "Ar raro", 30.0)
                         )))
                 .andReturn()
                 .getResponse()
@@ -120,7 +127,7 @@ class RawMaterialControllerIT {
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                new CreateRawMaterial("lz", "Luz", 10.0)
+                                new CreateRawMaterial("lz1", "Luz", 10.0)
                         )))
                 .andReturn()
                 .getResponse()

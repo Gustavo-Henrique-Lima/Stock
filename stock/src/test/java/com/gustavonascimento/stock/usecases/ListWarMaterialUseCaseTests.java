@@ -9,6 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,45 +29,70 @@ class ListRawMaterialsUseCaseTest {
     private ListRawMaterialsUseCase useCase;
 
     @Test
-    void shouldReturnListOfRawMaterialsWhenDataExists() {
+    void shouldReturnPageOfRawMaterialsWhenDataExists() {
 
-        RawMaterial rm1 = new RawMaterial("RM-001", "Steel", 100.0);
-        RawMaterial rm2 = new RawMaterial("RM-002", "Aluminum", 50.0);
+        RawMaterial rm1 = new RawMaterial("FG", "Fogo", 100.0);
+        RawMaterial rm2 = new RawMaterial("AR", "Ar", 50.0);
 
         setId(rm1, 1L);
         setId(rm2, 2L);
 
-        when(repository.findAll()).thenReturn(List.of(rm1, rm2));
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<GetRawMaterial> result = useCase.execute();
+        Page<RawMaterial> page = new PageImpl<>(
+                List.of(rm1, rm2),
+                pageable,
+                2
+        );
+
+        when(repository.findAll(pageable)).thenReturn(page);
+
+        Page<GetRawMaterial> result = useCase.execute(pageable);
 
         assertThat(result)
-                .isNotNull()
-                .hasSize(2);
+                .isNotNull();
 
-        assertThat(result)
-                .extracting(GetRawMaterial::id, GetRawMaterial::code, GetRawMaterial::name, GetRawMaterial::stockQuantity)
+        assertThat(result.getContent())
+                .hasSize(2)
+                .extracting(
+                        GetRawMaterial::id,
+                        GetRawMaterial::code,
+                        GetRawMaterial::name,
+                        GetRawMaterial::stockQuantity
+                )
                 .containsExactly(
-                        tuple(1L, "RM-001", "Steel", 100.0),
-                        tuple(2L, "RM-002", "Aluminum", 50.0)
+                        tuple(1L, "FG", "Fogo", 100.0),
+                        tuple(2L, "AR", "Ar", 50.0)
                 );
 
-        verify(repository).findAll();
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getTotalPages()).isEqualTo(1);
+        assertThat(result.getNumber()).isEqualTo(0);
+
+        verify(repository).findAll(pageable);
         verifyNoMoreInteractions(repository);
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoRawMaterialsExist() {
+    void shouldReturnEmptyPageWhenNoRawMaterialsExist() {
 
-        when(repository.findAll()).thenReturn(List.of());
+        Pageable pageable = PageRequest.of(0, 10);
 
-        List<GetRawMaterial> result = useCase.execute();
+        Page<RawMaterial> emptyPage = Page.empty(pageable);
+
+        when(repository.findAll(pageable)).thenReturn(emptyPage);
+
+        Page<GetRawMaterial> result = useCase.execute(pageable);
 
         assertThat(result)
                 .isNotNull()
                 .isEmpty();
 
-        verify(repository).findAll();
+        assertThat(result.getTotalElements()).isZero();
+        assertThat(result.getTotalPages()).isZero();
+        assertThat(result.getNumber()).isEqualTo(0);
+
+        verify(repository).findAll(pageable);
         verifyNoMoreInteractions(repository);
     }
 

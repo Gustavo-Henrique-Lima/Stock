@@ -1,6 +1,7 @@
 package com.gustavonascimento.stock.usecases;
 
 import com.gustavonascimento.stock.repositories.RawMaterialRepository;
+import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import com.gustavonascimento.stock.usecases.rawmaterial.DeleteRawMaterialUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +39,7 @@ class DeleteRawMaterialUseCaseTest {
         when(repository.existsById(rawMaterialId)).thenReturn(false);
 
         assertThatThrownBy(() -> useCase.execute(rawMaterialId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Máteria-prima não encontrada");
 
         verify(repository).existsById(rawMaterialId);
