@@ -1,5 +1,6 @@
 package com.gustavonascimento.stock.controllers;
 
+import com.gustavonascimento.stock.controllers.exceptions.StandardError;
 import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
@@ -70,6 +71,19 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(
+                            description = "Unprocessable Entity",
+                            responseCode = "422",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -111,6 +125,19 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(
+                            description = "Unprocessable Entity",
+                            responseCode = "422",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -154,6 +181,12 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -231,6 +264,12 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
+                    ),
+                    @ApiResponse(description = "Not Found",
+                            responseCode = "404",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )

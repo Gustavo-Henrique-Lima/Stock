@@ -3,6 +3,7 @@ package com.gustavonascimento.stock.usecases.rawmaterial;
 import com.gustavonascimento.stock.entities.RawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.repositories.RawMaterialRepository;
+import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class GetRawMaterialUseCase {
         LOG.info("Buscando matéria-prima: {}", rawMaterialId);
         RawMaterial entity = repository.findById(rawMaterialId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Matéria-prima não encontrada")
+                        new ResourceNotFoundException("Matéria-prima não encontrada")
                 );
         LOG.info("Matéria-prima localizada com sucesso");
         return new GetRawMaterial(entity.getId(), entity.getCode(), entity.getName(), entity.getStockQuantity());

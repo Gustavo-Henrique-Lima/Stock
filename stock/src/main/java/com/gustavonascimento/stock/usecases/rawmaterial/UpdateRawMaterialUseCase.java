@@ -1,6 +1,7 @@
 package com.gustavonascimento.stock.usecases.rawmaterial;
 
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
+import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class UpdateRawMaterialUseCase {
 
         RawMaterial entity = repository.findById(rawMaterialId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Máteria prima não encontrada")
+                        new ResourceNotFoundException("Máteria prima não encontrada")
                 );
 
         updateData(entity, record);
