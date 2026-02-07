@@ -6,6 +6,8 @@ import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
 import com.gustavonascimento.stock.usecases.rawmaterial.*;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -202,8 +204,8 @@ public class RawMaterialController {
     }
 
     @Operation(
-            summary = "List all raw materials",
-            description = "Returns all raw materials registered in the system",
+            summary = "List all raw materials paginated",
+            description = "Returns a page of raw materials registered in the system",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -233,10 +235,10 @@ public class RawMaterialController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
-    public ResponseEntity<List<GetRawMaterial>> list() {
+    public ResponseEntity<Page<GetRawMaterial>> list(Pageable pageable) {
 
-        List<GetRawMaterial> response =
-                listUseCase.execute();
+        Page<GetRawMaterial> response =
+                listUseCase.execute(pageable);
 
         return ResponseEntity.ok(response);
     }
