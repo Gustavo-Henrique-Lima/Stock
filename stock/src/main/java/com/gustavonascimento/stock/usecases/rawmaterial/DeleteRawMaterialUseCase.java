@@ -1,6 +1,7 @@
 package com.gustavonascimento.stock.usecases.rawmaterial;
 
 import com.gustavonascimento.stock.repositories.RawMaterialRepository;
+import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class DeleteRawMaterialUseCase {
         LOG.info("Iniciando processo de deleção da máteria-prima: {}", rawMaterialId);
 
         if (!repository.existsById(rawMaterialId)) {
-            throw new IllegalArgumentException("Máteria-prima não encontrada");
+            throw new ResourceNotFoundException("Máteria-prima não encontrada");
         }
 
         LOG.info("Deletando matéria-prima do DB");

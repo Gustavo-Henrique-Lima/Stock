@@ -3,6 +3,7 @@ package com.gustavonascimento.stock.usecases;
 import com.gustavonascimento.stock.entities.RawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.repositories.RawMaterialRepository;
+import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import com.gustavonascimento.stock.usecases.rawmaterial.GetRawMaterialUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +52,7 @@ class GetRawMaterialUseCaseTest {
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> useCase.execute(id))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Matéria-prima não encontrada");
 
         verify(repository).findById(id);
