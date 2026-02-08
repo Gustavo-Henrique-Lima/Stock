@@ -3,8 +3,10 @@ package com.gustavonascimento.stock.services;
 import com.gustavonascimento.stock.entities.User;
 import com.gustavonascimento.stock.repositories.RoleRepository;
 import com.gustavonascimento.stock.repositories.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

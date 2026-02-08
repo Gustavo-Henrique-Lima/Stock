@@ -1,10 +1,8 @@
 package com.gustavonascimento.stock.usecases.product;
 
 import com.gustavonascimento.stock.entities.Product;
-import com.gustavonascimento.stock.entities.RawMaterial;
 import com.gustavonascimento.stock.records.product.CreateProduct;
 import com.gustavonascimento.stock.records.product.GetProduct;
-import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.repositories.ProductRepository;
 
 import org.slf4j.Logger;

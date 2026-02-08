@@ -9,7 +9,7 @@ import com.gustavonascimento.stock.repositories.ProductRepository;
 import com.gustavonascimento.stock.repositories.RawMaterialRepository;
 import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
 import com.gustavonascimento.stock.usecases.exceptions.ValidJunctionException;
-import com.gustavonascimento.stock.usecases.product.CreateProductUseCase;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
