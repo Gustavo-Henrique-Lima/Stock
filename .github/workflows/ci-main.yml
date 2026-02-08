@@ -1,0 +1,114 @@
+name: Build, Coverage Badge and Docker Hub
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Run Checkstyle
+        run: |
+          cd stock
+          mvn validate
+
+      - name: Build with Maven (verify)
+        run: |
+          cd stock
+          mvn clean verify
+
+      - name: Login Docker
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/stock .
+
+      - name: Push image docker
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock
+
+      - name: Save JaCoCo Report
+        if: success()
+        run: |
+          mv stock/target/site/jacoco/jacoco.csv jacoco.csv
+
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: jacoco.csv
+
+  generate-badge:
+    name: Generate Badge
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Download JaCoCo Report
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-report
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Create Badge Directory
+        run: mkdir -p .github/badges
+
+      - name: Generate Coverage Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: jacoco.csv
+          badges-directory: .github/badges
+          coverage-badge-filename: coverage-badge.svg
+          generate-coverage-badge: true
+
+      - name: Remove Old Badge
+        run: |
+          sed -i.bak '/!\[Cobertura de Testes\](.github\/badges\/coverage-badge\.svg)/d' README.md
+
+      - name: Commit Removal of Old Badge
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Removendo badge antigo de cobertura"
+          file_pattern: "README.md"
+
+      - name: Add New Badge to README
+        run: |
+          BADGE_MARKDOWN="![Cobertura de Testes](.github/badges/coverage-badge.svg)"
+          echo -e "$BADGE_MARKDOWN\n\n$(cat README.md)" > README.md
+
+      - name: Commit New Badge
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Adicionando novo badge de cobertura"
+          file_pattern: ".github/badges/coverage-badge.svg README.md"
+
+      - name: Upload Coverage Badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: .github/badges/coverage-badge.svg
