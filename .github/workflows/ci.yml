@@ -2,7 +2,7 @@ name: Build, Coverage Badge and Docker Hub
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
 
 jobs:
   build:
