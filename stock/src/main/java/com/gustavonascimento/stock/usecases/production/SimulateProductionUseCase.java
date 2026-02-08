@@ -49,6 +49,10 @@ public class SimulateProductionUseCase {
         // Simulação
         for (Product product : products) {
 
+            if (product.getRawMaterials().isEmpty()) {
+                continue;
+            }
+
             long maxProducible = Long.MAX_VALUE;
 
             for (ProductRawMaterial prm : product.getRawMaterials()) {
