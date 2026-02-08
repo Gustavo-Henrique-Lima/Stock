@@ -2,9 +2,7 @@ package com.gustavonascimento.stock.usecases.validation;
 
 import com.gustavonascimento.stock.controllers.exceptions.FieldMessage;
 import com.gustavonascimento.stock.entities.Product;
-import com.gustavonascimento.stock.entities.RawMaterial;
 import com.gustavonascimento.stock.records.product.CreateProduct;
-import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
 import com.gustavonascimento.stock.repositories.ProductRepository;
 
 import jakarta.validation.ConstraintValidator;

@@ -1,14 +1,11 @@
 package com.gustavonascimento.stock.usecases.product;
 
 import com.gustavonascimento.stock.entities.Product;
-import com.gustavonascimento.stock.entities.RawMaterial;
 import com.gustavonascimento.stock.records.product.GetProduct;
 import com.gustavonascimento.stock.records.product.UpdateProduct;
-import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
-import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
 import com.gustavonascimento.stock.repositories.ProductRepository;
 import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
-import com.gustavonascimento.stock.usecases.rawmaterial.UpdateRawMaterialUseCase;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

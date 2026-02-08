@@ -1,6 +1,5 @@
 package com.gustavonascimento.stock.entities;
 
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;

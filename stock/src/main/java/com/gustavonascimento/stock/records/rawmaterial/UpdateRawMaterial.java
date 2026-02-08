@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-import java.math.BigDecimal;
-
 public record UpdateRawMaterial(
 
         @NotBlank(message = "O campo nome é obrigatório")

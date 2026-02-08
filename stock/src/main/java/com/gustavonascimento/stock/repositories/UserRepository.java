@@ -1,7 +1,6 @@
 package com.gustavonascimento.stock.repositories;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import com.gustavonascimento.stock.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

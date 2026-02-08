@@ -1,12 +1,11 @@
 package com.gustavonascimento.stock.records.rawmaterial;
 
 import com.gustavonascimento.stock.usecases.validation.RawMaterialInsertValid;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-
-import java.math.BigDecimal;
 
 @RawMaterialInsertValid
 public record CreateRawMaterial(
