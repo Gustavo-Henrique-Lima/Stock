@@ -1,43 +1,48 @@
 package com.gustavonascimento.stock.controllers;
 
 import com.gustavonascimento.stock.controllers.exceptions.StandardError;
-import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
-import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
-import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
-import com.gustavonascimento.stock.usecases.rawmaterial.*;
-import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import com.gustavonascimento.stock.records.product.CreateProduct;
+import com.gustavonascimento.stock.records.product.GetProduct;
+import com.gustavonascimento.stock.records.product.UpdateProduct;
+import com.gustavonascimento.stock.usecases.product.CreateProductUseCase;
+import com.gustavonascimento.stock.usecases.product.DeleteProductUseCase;
+import com.gustavonascimento.stock.usecases.product.GetProductUseCase;
+import com.gustavonascimento.stock.usecases.product.ListProductsUseCase;
+import com.gustavonascimento.stock.usecases.product.UpdateProductUseCase;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/raw-materials")
-public class RawMaterialController {
+@RequestMapping("/api/products")
+public class ProductController {
 
-    private final CreateRawMaterialUseCase createUseCase;
-    private final UpdateRawMaterialUseCase updateUseCase;
-    private final GetRawMaterialUseCase getUseCase;
-    private final ListRawMaterialsUseCase listUseCase;
-    private final DeleteRawMaterialUseCase deleteUseCase;
+    private final CreateProductUseCase createUseCase;
+    private final UpdateProductUseCase updateUseCase;
+    private final GetProductUseCase getUseCase;
+    private final ListProductsUseCase listUseCase;
+    private final DeleteProductUseCase deleteUseCase;
 
-    public RawMaterialController(
-            CreateRawMaterialUseCase createUseCase,
-            UpdateRawMaterialUseCase updateUseCase,
-            GetRawMaterialUseCase getUseCase,
-            ListRawMaterialsUseCase listUseCase,
-            DeleteRawMaterialUseCase deleteUseCase
+    public ProductController(
+            CreateProductUseCase createUseCase,
+            UpdateProductUseCase updateUseCase,
+            GetProductUseCase getUseCase,
+            ListProductsUseCase listUseCase,
+            DeleteProductUseCase deleteUseCase
     ) {
         this.createUseCase = createUseCase;
         this.updateUseCase = updateUseCase;
@@ -47,15 +52,15 @@ public class RawMaterialController {
     }
 
     @Operation(
-            summary = "Create a raw material",
-            description = "This endpoint is used to create a new raw material",
+            summary = "Create a product",
+            description = "Creates a new product",
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "Raw material created successfully",
+                            description = "Product created successfully",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetRawMaterial.class)
+                                    schema = @Schema(implementation = GetProduct.class)
                             )
                     ),
                     @ApiResponse(
@@ -81,35 +86,29 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = StandardError.class))
                     ),
-                    @ApiResponse(description = "Not Found",
-                            responseCode = "404",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = StandardError.class))
-                    )
             }
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<GetRawMaterial> create(
-            @RequestBody @Valid CreateRawMaterial record
+    public ResponseEntity<GetProduct> create(
+            @RequestBody @Valid CreateProduct record
     ) {
-        GetRawMaterial rawMaterial = createUseCase.execute(record);
+        GetProduct product = createUseCase.execute(record);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(rawMaterial.id()).toUri();
-        return ResponseEntity.created(uri).body(rawMaterial);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(product.id()).toUri();
+        return ResponseEntity.created(uri).body(product);
     }
 
     @Operation(
-            summary = "Update a raw material",
-            description = "This endpoint is used to update an existing raw material",
+            summary = "Update a product",
+            description = "Updates an existing product",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Raw material updated successfully",
+                            description = "Product updated successfully",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetRawMaterial.class)
+                                    schema = @Schema(implementation = GetProduct.class)
                             )
                     ),
                     @ApiResponse(
@@ -128,37 +127,37 @@ public class RawMaterialController {
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
                     ),
-                    @ApiResponse(description = "Not Found",
+                    @ApiResponse(
+                            description = "Product not found",
                             responseCode = "404",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = StandardError.class))
+                                    examples = @ExampleObject(value = "{ \"message\": \"Product not found\" }")
+                            )
                     )
             }
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<GetRawMaterial> update(
+    public ResponseEntity<GetProduct> update(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateRawMaterial record
+            @RequestBody @Valid UpdateProduct command
     ) {
-        GetRawMaterial recordUpdated = updateUseCase.execute(id, record);
+        GetProduct product = updateUseCase.execute(id, command);
 
-        return ResponseEntity.ok(
-                recordUpdated
-        );
+        return ResponseEntity.ok(product);
     }
 
     @Operation(
-            summary = "Get raw material by id",
-            description = "Returns a raw material by its id",
+            summary = "Get product by id",
+            description = "Returns a product by its id",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Ok",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetRawMaterial.class)
+                                    schema = @Schema(implementation = GetProduct.class)
                             )
                     ),
                     @ApiResponse(
@@ -177,35 +176,35 @@ public class RawMaterialController {
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
                     ),
-                    @ApiResponse(description = "Not Found",
+                    @ApiResponse(
+                            description = "Product not found",
                             responseCode = "404",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = StandardError.class))
+                                    examples = @ExampleObject(value = "{ \"message\": \"Product not found\" }")
+                            )
                     )
             }
     )
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<GetRawMaterial> getById(@PathVariable Long id) {
+    public ResponseEntity<GetProduct> getById(@PathVariable Long id) {
 
-        GetRawMaterial record = getUseCase.execute(id);
+        GetProduct product = getUseCase.execute(id);
 
-        return ResponseEntity.ok(
-                record
-        );
+        return ResponseEntity.ok(product);
     }
 
     @Operation(
-            summary = "List all raw materials paginated",
-            description = "Returns a page of raw materials registered in the system",
+            summary = "List products",
+            description = "Returns a paginated list of products",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Ok",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetRawMaterial.class)
+                                    schema = @Schema(implementation = GetProduct.class)
                             )
                     ),
                     @ApiResponse(
@@ -228,21 +227,20 @@ public class RawMaterialController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
-    public ResponseEntity<Page<GetRawMaterial>> list(Pageable pageable) {
+    public ResponseEntity<Page<GetProduct>> list(Pageable pageable) {
 
-        Page<GetRawMaterial> response =
-                listUseCase.execute(pageable);
+        Page<GetProduct> response = listUseCase.execute(pageable);
 
         return ResponseEntity.ok(response);
     }
 
     @Operation(
-            summary = "Delete a raw material",
-            description = "Deletes a raw material by its id",
+            summary = "Delete a product",
+            description = "Deletes a product by its id",
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Raw material deleted successfully"
+                            description = "Product deleted successfully"
                     ),
                     @ApiResponse(
                             description = "Unauthorized",
@@ -259,12 +257,6 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
-                    ),
-                    @ApiResponse(description = "Not Found",
-                            responseCode = "404",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = StandardError.class))
                     )
             }
     )
@@ -275,5 +267,4 @@ public class RawMaterialController {
 
         return ResponseEntity.noContent().build();
     }
-
 }
