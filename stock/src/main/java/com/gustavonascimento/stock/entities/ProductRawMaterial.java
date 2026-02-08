@@ -68,11 +68,11 @@ public class ProductRawMaterial implements Serializable {
         if (o == null || getClass() != o.getClass())
             return false;
         ProductRawMaterial that = (ProductRawMaterial) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(rawMaterial, that.rawMaterial) && Objects.equals(requiredQuantity, that.requiredQuantity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(rawMaterial, requiredQuantity);
     }
 }
