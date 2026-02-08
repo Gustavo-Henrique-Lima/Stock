@@ -21,11 +21,6 @@ jobs:
           distribution: 'zulu'
           java-version: '21'
 
-      - name: Run Checkstyle
-        run: |
-          cd stock
-          mvn validate
-
       - name: Build with Maven (verify)
         run: |
           cd stock
@@ -35,15 +30,19 @@ jobs:
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/stock .
+        run: |
+          cd stock
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/stock:latest \
+                      -t ${{ secrets.DOCKERHUB_USERNAME }}/stock:${{ github.sha }} .
 
       - name: Push image docker
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock:${{ github.sha }}
 
       - name: Save JaCoCo Report
         if: success()
-        run: |
-          mv stock/target/site/jacoco/jacoco.csv jacoco.csv
+        run: mv stock/target/site/jacoco/jacoco.csv jacoco.csv
 
       - name: Upload JaCoCo Report
         uses: actions/upload-artifact@v4
