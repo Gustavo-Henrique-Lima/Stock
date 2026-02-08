@@ -5,7 +5,9 @@ import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
 import com.gustavonascimento.stock.usecases.rawmaterial.*;
+
 import jakarta.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/raw-materials")
@@ -127,13 +129,6 @@ public class RawMaterialController {
                                     mediaType = "application/json",
                                     examples = @ExampleObject(value = "{ \"message\": \"Forbidden\" }")
                             )
-                    ),
-                    @ApiResponse(
-                            description = "Unprocessable Entity",
-                            responseCode = "422",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = StandardError.class))
                     ),
                     @ApiResponse(description = "Not Found",
                             responseCode = "404",

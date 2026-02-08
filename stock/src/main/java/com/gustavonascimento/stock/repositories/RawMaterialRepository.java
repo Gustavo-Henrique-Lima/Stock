@@ -2,10 +2,12 @@ package com.gustavonascimento.stock.repositories;
 
 import com.gustavonascimento.stock.entities.RawMaterial;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface RawMaterialRepository extends JpaRepository<com.gustavonascimento.stock.entities.RawMaterial, Long> {
+@Repository
+public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long> {
 
     Optional<RawMaterial> findByCode(String code);
 

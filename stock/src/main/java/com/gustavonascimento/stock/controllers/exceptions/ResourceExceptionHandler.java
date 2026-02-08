@@ -2,10 +2,7 @@ package com.gustavonascimento.stock.controllers.exceptions;
 
 import java.time.Instant;
 
-import com.gustavonascimento.stock.usecases.exceptions.ForbiddenException;
-import com.gustavonascimento.stock.usecases.exceptions.ResourceNotFoundException;
-import com.gustavonascimento.stock.usecases.exceptions.UnauthorizedException;
-import com.gustavonascimento.stock.usecases.exceptions.ValidDataException;
+import com.gustavonascimento.stock.usecases.exceptions.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +59,17 @@ public class ResourceExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.NOT_FOUND.value());
         err.setError("Erro de validação");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value()).body(err);
+    }
+
+    @ExceptionHandler(ValidJunctionException.class)
+    public ResponseEntity<ValidationError> validation(ValidJunctionException e, HttpServletRequest request) {
+        ValidationError err = new ValidationError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        err.setError("Exceção de validação");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value()).body(err);

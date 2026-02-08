@@ -1,6 +1,5 @@
 package com.gustavonascimento.stock.config.customgrant;
 
-
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;

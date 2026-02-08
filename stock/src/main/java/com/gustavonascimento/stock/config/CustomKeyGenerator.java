@@ -1,8 +1,10 @@
 package com.gustavonascimento.stock.config;
 
 import org.springframework.cache.interceptor.KeyGenerator;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.util.StringUtils;
 
 @Configuration

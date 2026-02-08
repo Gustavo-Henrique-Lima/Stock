@@ -1,8 +1,10 @@
 package com.gustavonascimento.stock.config;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -11,11 +13,16 @@ import com.gustavonascimento.stock.config.customgrant.CustomPasswordAuthenticati
 import com.gustavonascimento.stock.config.customgrant.CustomPasswordAuthenticationProvider;
 import com.gustavonascimento.stock.config.customgrant.CustomUserAuthorities;
 import com.gustavonascimento.stock.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.core.annotation.Order;
+
 import org.springframework.http.MediaType;
+
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,6 +57,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
