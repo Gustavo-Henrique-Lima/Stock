@@ -10,7 +10,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-class RawMaterialRepositoryIT {
+class RawMaterialRepositoryTest {
 
     @Autowired
     private RawMaterialRepository repository;
