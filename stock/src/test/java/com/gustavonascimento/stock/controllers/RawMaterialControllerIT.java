@@ -145,4 +145,15 @@ class RawMaterialControllerIT {
         mockMvc.perform(get("/api/raw-materials/all"))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void shouldListRawMaterialsToAssociate() throws Exception {
+        mockMvc.perform(get("/api/raw-materials/to-associate")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].name").isNotEmpty());
+    }
 }
