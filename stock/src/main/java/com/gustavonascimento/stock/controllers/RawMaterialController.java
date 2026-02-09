@@ -1,6 +1,7 @@
 package com.gustavonascimento.stock.controllers;
 
 import com.gustavonascimento.stock.controllers.exceptions.StandardError;
+import com.gustavonascimento.stock.records.rawmaterial.AssociateRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.CreateRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.GetRawMaterial;
 import com.gustavonascimento.stock.records.rawmaterial.UpdateRawMaterial;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/raw-materials")
@@ -33,19 +35,22 @@ public class RawMaterialController {
     private final GetRawMaterialUseCase getUseCase;
     private final ListRawMaterialsUseCase listUseCase;
     private final DeleteRawMaterialUseCase deleteUseCase;
+    private final AssociateRawMaterialDataUseCase dataAssociateUseCase;
 
     public RawMaterialController(
             CreateRawMaterialUseCase createUseCase,
             UpdateRawMaterialUseCase updateUseCase,
             GetRawMaterialUseCase getUseCase,
             ListRawMaterialsUseCase listUseCase,
-            DeleteRawMaterialUseCase deleteUseCase
+            DeleteRawMaterialUseCase deleteUseCase,
+            AssociateRawMaterialDataUseCase dataAssociateUseCase
     ) {
         this.createUseCase = createUseCase;
         this.updateUseCase = updateUseCase;
         this.getUseCase = getUseCase;
         this.listUseCase = listUseCase;
         this.deleteUseCase = deleteUseCase;
+        this.dataAssociateUseCase = dataAssociateUseCase;
     }
 
     @Operation(
@@ -276,6 +281,51 @@ public class RawMaterialController {
         deleteUseCase.execute(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(
+            summary = "List raw materials for association",
+            description = "Returns a simplified list of raw materials containing only id and name, used for association purposes",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ok",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AssociateRawMaterial.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized",
+                            responseCode = "401",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(
+                                            value = "{ \"message\": \"Unauthorized\" }"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(
+                                            value = "{ \"message\": \"Forbidden\" }"
+                                    )
+                            )
+                    )
+            }
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = "/to-associate")
+    public ResponseEntity<List<AssociateRawMaterial>> findRawMaterialDataToAssociate() {
+
+        List<AssociateRawMaterial> response =
+                dataAssociateUseCase.execute();
+
+        return ResponseEntity.ok(response);
     }
 
 }

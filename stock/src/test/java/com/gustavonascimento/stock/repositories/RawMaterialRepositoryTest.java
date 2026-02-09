@@ -1,16 +1,18 @@
 package com.gustavonascimento.stock.repositories;
 
 import com.gustavonascimento.stock.entities.RawMaterial;
+import com.gustavonascimento.stock.records.rawmaterial.AssociateRawMaterial;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-class RawMaterialRepositoryIT {
+class RawMaterialRepositoryTest {
 
     @Autowired
     private RawMaterialRepository repository;
@@ -52,4 +54,27 @@ class RawMaterialRepositoryIT {
 
         assertThat(exists).isFalse();
     }
+
+
+    @Test
+    void shouldReturnRawMaterialSummaries() {
+        List<AssociateRawMaterial> result =
+                repository.findAllSummaries();
+
+        assertThat(result)
+                .isNotEmpty()
+                .hasSizeGreaterThanOrEqualTo(2);
+
+        AssociateRawMaterial first = result.get(0);
+
+        assertThat(first.id()).isNotNull();
+        assertThat(first.name()).isNotBlank();
+
+        assertThat(first).isNotInstanceOf(RawMaterial.class);
+
+        assertThat(result)
+                .extracting(AssociateRawMaterial::name)
+                .contains("Aço 304 Industrial", "Alumínio Industrial");
+    }
+
 }
