@@ -12,6 +12,7 @@ services:
       APP_DB: XEPDB1
     volumes:
       - oracle-data:/opt/oracle/oradata
+      - ./docker/oracle:/container-entrypoint-initdb.d
     healthcheck:
       test: [
         "CMD-SHELL",

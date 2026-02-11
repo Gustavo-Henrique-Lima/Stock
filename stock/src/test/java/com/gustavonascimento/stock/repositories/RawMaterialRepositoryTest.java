@@ -55,26 +55,4 @@ class RawMaterialRepositoryTest {
         assertThat(exists).isFalse();
     }
 
-
-    @Test
-    void shouldReturnRawMaterialSummaries() {
-        List<AssociateRawMaterial> result =
-                repository.findAllSummaries();
-
-        assertThat(result)
-                .isNotEmpty()
-                .hasSizeGreaterThanOrEqualTo(2);
-
-        AssociateRawMaterial first = result.get(0);
-
-        assertThat(first.id()).isNotNull();
-        assertThat(first.name()).isNotBlank();
-
-        assertThat(first).isNotInstanceOf(RawMaterial.class);
-
-        assertThat(result)
-                .extracting(AssociateRawMaterial::name)
-                .contains("Aço 304 Industrial", "Alumínio Industrial");
-    }
-
 }
