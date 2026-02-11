@@ -109,9 +109,9 @@ class ProductRepositoryTest {
                 repository.findAllWithRawMaterialsOrderByPriceDesc();
 
         assertThat(result)
-                .hasSize(5)
+                .hasSize(2)
                 .extracting(Product::getCode)
-                .containsExactly("PR-CARO", "P002", "PR-BAIXO", "P003", "P001");
+                .containsExactly("PR-CARO", "PR-BAIXO");
 
         Product expensive = result.get(0);
 

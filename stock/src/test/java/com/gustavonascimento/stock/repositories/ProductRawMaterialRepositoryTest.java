@@ -54,6 +54,7 @@ class ProductRawMaterialRepositoryTest {
 
         entityManager.persist(prm);
         entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
