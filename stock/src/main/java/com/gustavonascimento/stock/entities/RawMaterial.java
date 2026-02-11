@@ -5,11 +5,16 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_raw_material")
+@Table(name = "TB_RAW_MATERIAL")
 public class RawMaterial {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(
+            name = "product_seq",
+            sequenceName = "SEQ_PRODUCT",
+            allocationSize = 1
+    )
     private Long id;
 
     @Column(name = "rm_code", nullable = false, length = 50, unique = true)
