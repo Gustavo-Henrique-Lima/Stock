@@ -6,11 +6,16 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_product_raw_materials")
+@Table(name = "TB_PRODUCT_RAW_MATERIALS")
 public class ProductRawMaterial implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(
+            name = "product_seq",
+            sequenceName = "SEQ_PRODUCT",
+            allocationSize = 1
+    )
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

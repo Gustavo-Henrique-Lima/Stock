@@ -3,21 +3,23 @@ package com.gustavonascimento.stock.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_role")
+@Table(name = "TB_ROLE")
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(
+            name = "product_seq",
+            sequenceName = "SEQ_PRODUCT",
+            allocationSize = 1
+    )
     private Long id;
+
     private String authority;
 
     public Role() {

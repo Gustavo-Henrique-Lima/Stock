@@ -11,11 +11,16 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_product")
+@Table(name = "TB_PRODUCT")
 public class Product implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+    @SequenceGenerator(
+            name = "product_seq",
+            sequenceName = "SEQ_PRODUCT",
+            allocationSize = 1
+    )
     private Long id;
 
     @Column(name = "pr_code", nullable = false, length = 50)
