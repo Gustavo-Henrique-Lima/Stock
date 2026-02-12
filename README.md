@@ -1,5 +1,6 @@
 ![Cobertura de Testes](.github/badges/coverage-badge.svg)
 
+
 🏭 InsuMax - Backend (Stock API)
 
 API REST responsável pelo gerenciamento de **produtos**,
