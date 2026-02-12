@@ -1,7 +1,6 @@
 ![Cobertura de Testes](.github/badges/coverage-badge.svg)
 
-
-🏭 InsuMax - Backend (Stock API)
+InsuMax - Backend (Stock API)
 
 API REST responsável pelo gerenciamento de **produtos**,
 **matérias-primas** e **simulação de produção** da aplicação
@@ -113,4 +112,3 @@ Swagger disponível em:
     SPRING_DATASOURCE_URL
     SPRING_DATASOURCE_USERNAME
     SPRING_DATASOURCE_PASSWORD
-
